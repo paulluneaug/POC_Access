@@ -14,7 +14,6 @@ using RebindingOperation = UnityEngine.InputSystem.InputActionRebindingExtension
 
 public class RebindableActionController : MonoBehaviour
 {
-
     public event Action<RebindableActionController> OnRebindingStart;
     public event Action<RebindableActionController> OnRebindingEnds;
 

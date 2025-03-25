@@ -35,8 +35,13 @@ public class RebindingManager : MonoBehaviour
 
     [NonSerialized] private bool m_rebindingOperationRunning;
 
+    private void Awake()
+    {
+        LoadCanvas();
+    }
 
-    private void Start()
+
+    private void LoadCanvas()
     {
         LoadRebinding();
 
