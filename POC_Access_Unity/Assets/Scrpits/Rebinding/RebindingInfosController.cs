@@ -18,7 +18,7 @@ public class RebindingInfosController : MonoBehaviour
     [SerializeField] private TMP_Text m_mainText;
     [SerializeField] private Button m_cancelOperationButton;
 
-    [NonSerialized] private RebindableActionController m_displayedActionController;
+    [NonSerialized] private RebindableController m_displayedActionController;
     [NonSerialized] private bool m_operationInfosDisplayed = false;
 
     private void Awake()
@@ -31,7 +31,7 @@ public class RebindingInfosController : MonoBehaviour
         m_cancelOperationButton.onClick.RemoveListener(OnCancelButtonClicked);
     }
 
-    public void DisplayOperationInfos(RebindableActionController controller)
+    public void DisplayOperationInfos(RebindableController controller)
     {
         m_infosPanel.gameObject.SetActive(true);
         m_operationInfosDisplayed = true;

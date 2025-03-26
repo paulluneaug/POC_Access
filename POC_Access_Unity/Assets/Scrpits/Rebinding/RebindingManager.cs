@@ -19,6 +19,7 @@ public class RebindingManager : MonoBehaviour
     [SerializeField] private InputActionReference[] m_remappableActions;
 
     [SerializeField] private GameObject m_remappableActionControllerPrefab;
+    [SerializeField] private GameObject m_remappableAxisControllerPrefab;
 
     [Header("UI References")]
     [SerializeField] private RectTransform m_controllersParent;
@@ -40,7 +41,6 @@ public class RebindingManager : MonoBehaviour
         LoadCanvas();
     }
 
-
     private void LoadCanvas()
     {
         LoadRebinding();
@@ -59,12 +59,19 @@ public class RebindingManager : MonoBehaviour
         for (int iAction = 0; iAction < actionsCount; ++iAction)
         {
             InputActionReference remapableAction = m_remappableActions[iAction];
-            RebindableActionController actionController = Instantiate(m_remappableActionControllerPrefab).GetComponent<RebindableActionController>();
+
+            RebindableActionController actionController = remapableAction.action.type switch
+            {
+                InputActionType.Value => Instantiate(m_remappableAxisControllerPrefab).GetComponent<RebindableAxisController>(),
+                InputActionType.Button => Instantiate(m_remappableActionControllerPrefab).GetComponent<RebindableActionController>(),
+                InputActionType.PassThrough => Instantiate(m_remappableActionControllerPrefab).GetComponent<RebindableActionController>(),
+                _ => throw new NotImplementedException(),
+            };
 
             actionController.gameObject.name = $"{remapableAction.name}_Controller";
             actionController.gameObject.SetActive(true);
             actionController.transform.SetParent(m_controllersParent);
-            actionController.Init(this, remapableAction, selectedDeviceData);
+            actionController.Init(this, remapableAction.action, selectedDeviceData);
 
             actionController.OnRebindingStart += OnRebindingStarts;
             actionController.OnRebindingEnds += OnRebindingEnds;
@@ -93,13 +100,13 @@ public class RebindingManager : MonoBehaviour
         m_quitRebindingButton.onClick.RemoveListener(Quit);
     }
 
-    private void OnRebindingStarts(RebindableActionController controller)
+    private void OnRebindingStarts(RebindableController controller)
     {
         m_rebindingOperationRunning = true;
         m_rebindingInfosController.DisplayOperationInfos(controller);
     }
 
-    private void OnRebindingEnds(RebindableActionController controller)
+    private void OnRebindingEnds(RebindableController controller)
     {
         m_rebindingOperationRunning = false;
         m_rebindingInfosController.HideOperationInfos();

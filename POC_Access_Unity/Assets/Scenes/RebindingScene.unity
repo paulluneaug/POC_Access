@@ -2943,6 +2943,7 @@ MonoBehaviour:
   - {fileID: 7795651120678052726, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   - {fileID: -6459013283741715685, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_remappableActionControllerPrefab: {fileID: 7238004267383394918, guid: c5f120a49a3ed6142ac6609a1b96d118, type: 3}
+  m_remappableAxisControllerPrefab: {fileID: 7238004267383394918, guid: f742e08ef839cd742b66ee3679455285, type: 3}
   m_controllersParent: {fileID: 668711669}
   m_selectedDeviceDropdown: {fileID: 723228804}
   m_deviceOptions:
