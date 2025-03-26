@@ -1104,6 +1104,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Runner",
+            "id": "1baebba3-ffe6-4407-922b-4162cb019097",
+            "actions": [
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "9dbcd9fb-628e-42e9-aa59-bf0067e140e1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f5dae47b-eddf-44b3-8182-90f9211d52e8",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2a66208-7fcc-42b1-96d4-cfc5d9fa2821",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
