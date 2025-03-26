@@ -12,11 +12,12 @@ using static RebindingInfosController;
 
 using RebindingOperation = UnityEngine.InputSystem.InputActionRebindingExtensions.RebindingOperation;
 
-public class RebindableActionController : MonoBehaviour
+public class RebindableActionController : SelectablePreferenceController
 {
     public event Action<RebindableActionController> OnRebindingStart;
     public event Action<RebindableActionController> OnRebindingEnds;
 
+    [Header("Parameters")]
     [SerializeField] private TMP_Text m_actionNameField;
     [SerializeField] private TMP_Text m_actionBindingField;
     [SerializeField] private Button m_rebindButton;

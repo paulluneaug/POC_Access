@@ -2948,23 +2948,6 @@ MonoBehaviour:
   m_deviceOptions:
     m_keyValuePairsList:
     - Key:
-        m_Text: Mouse and Keyboard
-        m_Image: {fileID: 0}
-        m_Color: {r: 0, g: 0, b: 0, a: 0}
-      Value:
-        ControlPaths:
-        - <Mouse>
-        - <Keyboard>
-        BindingGroup: Keyboard&Mouse
-    - Key:
-        m_Text: Gamepad
-        m_Image: {fileID: 0}
-        m_Color: {r: 0, g: 0, b: 0, a: 0}
-      Value:
-        ControlPaths:
-        - <Gamepad>
-        BindingGroup: Gamepad
-    - Key:
         m_Text: Custom
         m_Image: {fileID: 0}
         m_Color: {r: 0, g: 0, b: 0, a: 0}
