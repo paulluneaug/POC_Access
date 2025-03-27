@@ -19,7 +19,18 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     [NonSerialized] private int m_currentSceneIndex;
     [NonSerialized] private MiniGameManager m_currentMinigame;
 
+    [SerializeField] private int m_windowedWidth = 1920;
+    [SerializeField] private int m_windowedHeight = 1080;
+
     private float m_currentTimeScale = 1;
+    private Resolution m_screenNativeResolution;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        Application.targetFrameRate = 60;
+        m_screenNativeResolution = Screen.resolutions[^1];        
+    }
 
     protected override void Start()
     {
@@ -152,10 +163,17 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     {
         m_currentTimeScale = newTimeScale;
     }
-
-    private void OnWindowedModeChanged(bool newValue)
+    
+    private void OnWindowedModeChanged(bool isWindowed)
     {
-        Screen.fullScreen = !newValue;
+        if (!isWindowed)
+        {
+            Screen.SetResolution(m_screenNativeResolution.width, m_screenNativeResolution.height, FullScreenMode.FullScreenWindow);
+        }
+        else
+        {
+            Screen.SetResolution(m_windowedWidth, m_windowedHeight, FullScreenMode.Windowed);
+        }
     }
 
     public void QuitGame()
