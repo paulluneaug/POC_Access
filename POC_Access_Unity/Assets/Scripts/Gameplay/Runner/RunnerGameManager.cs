@@ -2,39 +2,42 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityUtility.Extensions;
 
-public class RunnerGameManager : MonoBehaviour
+public class RunnerGameManager : MiniGameManager
 {
     [SerializeField] private TriggerObject[] m_deathZoneTriggers;
     [SerializeField] private TriggerObject m_winZoneTrigger;
 
     [SerializeField] private RunnerPlayerController m_player;
 
-    private void Start()
-    {
-        StartGame();
-    }
 
-    private void StartGame()
+    public override void StartGame()
     {
+        base.StartGame();
+
         m_deathZoneTriggers.ForEach(deathZone => deathZone.OnEnter += OnEnterDeathZone);
         m_winZoneTrigger.OnEnter += OnWinZoneEnter;
 
         m_player.StartPlayer();
     }
 
-
-    private void FinishGame(bool win)
+    public override void Dispose()
     {
+        base.Dispose();
         m_deathZoneTriggers.ForEach(deathZone => deathZone.OnEnter -= OnEnterDeathZone);
         m_winZoneTrigger.OnEnter -= OnWinZoneEnter;
 
 
+    }
+
+    protected override void FinishGame()
+    {
+        base.FinishGame();
         m_player.StopPlayer();
     }
 
     private void OnWinZoneEnter(Collider collider)
     {
-        FinishGame(true);
+        FinishGame();
     }
 
     private void OnEnterDeathZone(Collider collider)
@@ -44,8 +47,7 @@ public class RunnerGameManager : MonoBehaviour
             return;
         }
 
-        FinishGame(false);
-
-        SceneManager.LoadScene(gameObject.scene.buildIndex);
+        m_player.StopPlayer();
+        m_requestReload = true;
     }
 }

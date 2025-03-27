@@ -2,15 +2,13 @@ using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityUtility.CustomAttributes;
 using UnityUtility.Extensions;
 using UnityUtility.MathU;
 
-public class PuzzleGameManager : MonoBehaviour
+public class PuzzleGameManager : MiniGameManager
 {
     [SerializeField] private int m_pushLimit = 10000;
-    [SerializeField] private float m_axisDeadZone = 0.3f;
 
     [Title("Inputs")]
     [SerializeField] private InputActionReference m_movePlayerAction;
@@ -35,30 +33,29 @@ public class PuzzleGameManager : MonoBehaviour
     {
         if (m_targets.All(target => target.HasBox()))
         {
-            FinishGame(true);
+            FinishGame();
             return;
         }
     }
 
-    private void StartGame()
+    public override void StartGame()
     {
+        base.StartGame();
         m_targets = FindObjectsByType<PuzzleTarget>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         m_movePlayerAction.action.performed += OnMoveActionPerformed;
         m_restartLevelAction.action.performed += RestartGame;
     }
 
-    private void RestartGame(InputAction.CallbackContext context)
+    public override void Dispose()
     {
-        FinishGame(false);
-        SceneManager.LoadScene(gameObject.scene.buildIndex);
-    }
-
-    private void FinishGame(bool win)
-    {
+        base.Dispose();
         m_movePlayerAction.action.performed -= OnMoveActionPerformed;
         m_restartLevelAction.action.performed -= RestartGame;
+    }
 
-        Debug.LogWarning("Win Game");
+    private void RestartGame(InputAction.CallbackContext context)
+    {
+        m_requestReload = true;
     }
 
     private void OnMoveActionPerformed(InputAction.CallbackContext context)
@@ -143,7 +140,7 @@ public class PuzzleGameManager : MonoBehaviour
 
     private int Sign(float value)
     {
-        if (value == 0.0f )//value.Between(-m_axisDeadZone, m_axisDeadZone))
+        if (value == 0.0f)//value.Between(-m_axisDeadZone, m_axisDeadZone))
         {
             return 0;
         }
