@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIOptionSliderController : MonoBehaviour
+public class UIAbstractOptionSliderController : UIAbstractOption<float>
 {
     [Header("Components")]
     [SerializeField] private Slider _slider;
@@ -31,9 +31,8 @@ public class UIOptionSliderController : MonoBehaviour
         
         _slider.onValueChanged.AddListener(OnValueChanged);
         var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
-        _slider.SetValueWithoutNotify(value);
-        _valueText.text = value.ToString(_wholeNumbers ? "N0" : "N1", CultureInfo.InvariantCulture);
-        _defaultButton.onClick.AddListener(OnReset);
+        _slider.value = value;
+        _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
     }
@@ -42,11 +41,7 @@ public class UIOptionSliderController : MonoBehaviour
     {
         PlayerPrefs.SetFloat(_preferenceName, value);
         _valueText.text = value.ToString(_wholeNumbers ? "N0" : "N1", CultureInfo.InvariantCulture);
-    }
-
-    private void OnReset()
-    {
-        _slider.value = _defaultValue;
+        TriggerValueChanged(value);
     }
 
     private void OnRight()
@@ -57,5 +52,10 @@ public class UIOptionSliderController : MonoBehaviour
     private void OnLeft()
     {
         _slider.value -= _wholeNumbers ? _intIncrement : _increment;
+    }
+
+    public override void SetDefault()
+    {        
+        _slider.value = _defaultValue;
     }
 }

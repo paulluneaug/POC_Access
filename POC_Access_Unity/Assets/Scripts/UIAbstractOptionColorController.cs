@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIOptionColorController : MonoBehaviour
+public class UIAbstractOptionColorController : UIAbstractOption<Color>
 {
     [Header("Components")] 
     [SerializeField] private Slider _colorSlider;
@@ -27,7 +27,7 @@ public class UIOptionColorController : MonoBehaviour
         hueTex.Apply();
         _colorBackground.texture = hueTex;
         _colorSlider.onValueChanged.AddListener(OnSliderValueChanged);
-        _defaultButton.onClick.AddListener(OnReset);
+        _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
         var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
@@ -39,11 +39,7 @@ public class UIOptionColorController : MonoBehaviour
         var color = Color.HSVToRGB(value, 1, 1);
         _valueImage.color = color;
         PlayerPrefs.SetFloat(_preferenceName, value);
-    }
-
-    private void OnReset()
-    {
-        _colorSlider.value = _defaultValue;
+        TriggerValueChanged(color);
     }
 
     private void OnRight()
@@ -54,5 +50,10 @@ public class UIOptionColorController : MonoBehaviour
     private void OnLeft()
     {
         _colorSlider.value -= _increment;
+    }
+
+    public override void SetDefault()
+    {        
+        _colorSlider.value = _defaultValue;
     }
 }

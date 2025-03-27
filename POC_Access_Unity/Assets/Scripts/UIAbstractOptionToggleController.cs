@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIOptionToggleController : MonoBehaviour
+public class UIAbstractOptionToggleController : UIAbstractOption<bool>
 {
     [Header("Components")] 
     [SerializeField] private Toggle _toggle;
@@ -19,20 +19,15 @@ public class UIOptionToggleController : MonoBehaviour
     {
         _toggle.onValueChanged.AddListener(OnValueChanged);
         var value = IntToBool(PlayerPrefs.GetInt(_preferenceName, BoolToInt(_defaultValue)));
-        _toggle.SetIsOnWithoutNotify(value);
-        _valueText.text = value ? "On" : "Off";
-        _defaultButton.onClick.AddListener(OnReset);
+        _toggle.isOn = value;
+        _defaultButton.onClick.AddListener(SetDefault);
     }
 
     private void OnValueChanged(bool value)
     {
         PlayerPrefs.SetInt(_preferenceName, BoolToInt(value));
         _valueText.text = value ? "On" : "Off";
-    }
-
-    private void OnReset()
-    {
-        _toggle.isOn = _defaultValue;
+        TriggerValueChanged(value);
     }
 
     private bool IntToBool(int value)
@@ -43,5 +38,10 @@ public class UIOptionToggleController : MonoBehaviour
     private int BoolToInt(bool value)
     {
         return value ? 1 : 0;
+    }
+
+    public override void SetDefault()
+    {
+        _toggle.isOn = _defaultValue;
     }
 }

@@ -1,10 +1,14 @@
 using System;
+
+using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityUtility.SceneReference;
+using UnityUtility.Singletons;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourSingleton<GameManager>
 {
     //Platformer puzzle shooter
     [SerializeField] private SceneReference[] m_gameplayScenes;
@@ -104,5 +108,10 @@ public class GameManager : MonoBehaviour
     private void OnWindowedModeChanged(bool newValue)
     {
         Screen.fullScreen = !newValue;
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

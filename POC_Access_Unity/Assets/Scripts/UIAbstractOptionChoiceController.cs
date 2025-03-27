@@ -1,11 +1,9 @@
-using System;
-
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityUtility.Extensions;
 
-public class UIOptionChoiceController : MonoBehaviour
+public class UIAbstractOptionChoiceController : UIAbstractOption<string>
 {
     [Header("Components")] 
     [SerializeField] private TMP_Text _selectedChoiceText;
@@ -30,12 +28,12 @@ public class UIOptionChoiceController : MonoBehaviour
         m_currentSelectedIndex = ValueToIndex(value);
         OnIndexChanged();
 
-        _defaultButton.onClick.AddListener(OnReset);
+        _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
     }
-
-    private void OnReset()
+    
+    public override void SetDefault()
     {
         m_currentSelectedIndex = ValueToIndex(_defaultValue);
         OnIndexChanged();
@@ -58,6 +56,7 @@ public class UIOptionChoiceController : MonoBehaviour
         var value = IndexToValue(m_currentSelectedIndex);
         _selectedChoiceText.text = value;
         PlayerPrefs.SetString(_preferenceName, value);
+        TriggerValueChanged(value);
     }
 
     private string IndexToValue(int index)
@@ -74,4 +73,5 @@ public class UIOptionChoiceController : MonoBehaviour
     {
         return (x % m + m) % m;
     }
+
 }
