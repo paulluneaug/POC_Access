@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PuzzleTarget : PuzzleElement
 {
+    [SerializeField] private AudioSource m_targetValidateAudio;
+    [SerializeField] private AudioSource m_targetInvalidateMoveAudio;
+
     [NonSerialized] private bool m_hasBox;
 
     public override bool IsPushable()
@@ -28,6 +31,7 @@ public class PuzzleTarget : PuzzleElement
             m_hasBox = true;
             Debug.Log($"{name} has {other.name}");
             box.EnterTarget();
+            m_targetValidateAudio.Play();
         }
     }
 
@@ -38,6 +42,7 @@ public class PuzzleTarget : PuzzleElement
             m_hasBox = false;
             Debug.Log($"{name} no longer has {other.name}");
             box.ExitTarget();
+            m_targetInvalidateMoveAudio.Play();
         }
     }
 }
