@@ -1,7 +1,4 @@
 using System;
-
-using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,27 +12,70 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     [SerializeField] private InputActionReference m_skipMinigameAction;
 
+    [SerializeField] private UIOptionsMenuController m_optionsMenuController;
+
+    [SerializeField] private InputActionReference m_pauseAction;
 
     [NonSerialized] private int m_currentSceneIndex;
     [NonSerialized] private MiniGameManager m_currentMinigame;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    protected override void Start()
     {
-        DontDestroyOnLoad(gameObject);
-
+        base.Start();
+        
         m_currentSceneIndex = -1;
-        LoadNextScene();
 
         GameOptionsManager optionManager = GameOptionsManager.Instance;
         optionManager.IsWindowed.OnValueChanged += OnWindowedModeChanged;
         optionManager.GameSpeed.OnValueChanged += OnGameSpeedChanged;
 
         m_skipMinigameAction.action.performed += SkipMinigame;
+
+        m_optionsMenuController.OnMenuClosed += OnOptionsMenuClosedFirstTime;
+        m_optionsMenuController.OpenOptionMenu();
+        m_pauseAction.action.performed += OnGamePaused;
+
     }
 
-    private void OnDestroy()
+    // TODO
+    private void PauseGame()
     {
+        
+    }
+
+    // TODO
+    private void ResumeGame()
+    {
+        
+    }
+
+    private void OnOptionsMenuClosedFirstTime()
+    {
+        m_optionsMenuController.OnMenuClosed -= OnOptionsMenuClosedFirstTime;
+        m_optionsMenuController.OnMenuClosed += OnOptionsMenuClosed;
+        StartGame();
+    }
+
+    private void OnOptionsMenuClosed()
+    {
+        ResumeGame();
+    }
+
+    private void OnGamePaused(InputAction.CallbackContext obj)
+    {
+        PauseGame();
+    }
+
+    private void StartGame()
+    {
+        LoadNextScene();
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        
         if (!GameOptionsManager.ApplicationIsQuitting)
         {
             GameOptionsManager optionManager = GameOptionsManager.Instance;
@@ -49,6 +89,11 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     // Update is called once per frame
     private void Update()
     {
+        if (m_optionsMenuController.IsOpened)
+        {
+            return;
+        }
+        
         if (m_currentMinigame != null && m_currentMinigame.RequestSceneReload)
         {
             m_currentMinigame.RequestSceneReload = false;
@@ -87,6 +132,10 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     private void SkipMinigame(InputAction.CallbackContext context)
     {
+        if (m_optionsMenuController.IsOpened)
+        {
+            return;
+        }
         LoadNextScene();
     }
 

@@ -1,22 +1,26 @@
+using System;
+
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 using UnityUtility.MathU;
+using UnityUtility.Singletons;
 
-public class OptionsMenuController : MonoBehaviour
+public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuController>
 {
-    [SerializeField] private CanvasGroup m_menuOptions;
+    [SerializeField] private AudioMixer m_mixer;
     [SerializeField] private InputActionReference m_pauseAction;
+    
+    [Header("UI components")]
+    [SerializeField] private CanvasGroup m_menuOptions;
+    [SerializeField] private Selectable m_firstSelectable;
     [SerializeField] private Button m_saveButton;
     [SerializeField] private Button m_defaultButton;
-    [SerializeField] private Button m_closeButton;
     [SerializeField] private Button m_quitButton;
-    [SerializeField] private AudioMixer m_mixer;
+    
     [Header("Options")]
-    [SerializeField] private UIAbstractDefaultable[] m_options;
-
     [SerializeField] private UIAbstractOption<string> m_optionInvincibility;
     [SerializeField] private UIAbstractOption<float> m_optionVolumeGlobal;
     [SerializeField] private UIAbstractOption<float> m_optionVolumeSFX;
@@ -24,14 +28,24 @@ public class OptionsMenuController : MonoBehaviour
     [SerializeField] private UIAbstractOption<float> m_optionGameSpeed;
     [SerializeField] private UIAbstractOption<string> m_optionScreenMode;
 
+    public event Action OnMenuOpened;
+    public event Action OnMenuClosed;
+
+    private UIAbstractDefaultable[] m_options;
     private bool m_isOpened;
-    
-    private void Start()
+    public bool IsOpened => m_isOpened;
+
+    public override void Initialize()
     {
-        m_pauseAction.action.performed += OnPause;
+        base.Initialize();
+        m_options = new UIAbstractDefaultable[] { m_optionInvincibility, m_optionVolumeGlobal, m_optionVolumeSFX, m_optionVolumeMusic, m_optionGameSpeed, m_optionScreenMode };
+    }
+
+    protected override void Start()
+    {
+        m_pauseAction.action.performed += OnGamePaused;
         m_saveButton.onClick.AddListener(OnSaveButtonClicked);
         m_defaultButton.onClick.AddListener(OnDefaultButtonClicked);
-        m_closeButton.onClick.AddListener(OnCloseButtonClicked);
         m_quitButton.onClick.AddListener(OnQuitButtonClicked);
         
         m_optionInvincibility.OnValueChangedEvent += OptionInvincibilityChanged;
@@ -40,7 +54,6 @@ public class OptionsMenuController : MonoBehaviour
         m_optionVolumeMusic.OnValueChangedEvent += OptionVolumeMusicChanged;
         m_optionGameSpeed.OnValueChangedEvent += OptionGameSpeedChanged;
         m_optionScreenMode.OnValueChangedEvent += OptionScreenModeChanged;
-
     }
 
 
@@ -82,7 +95,7 @@ public class OptionsMenuController : MonoBehaviour
         };
     }
     
-    private void OnPause(InputAction.CallbackContext ctx)
+    private void OnGamePaused(InputAction.CallbackContext ctx)
     {
         if (m_isOpened)
         {
@@ -98,10 +111,14 @@ public class OptionsMenuController : MonoBehaviour
         m_menuOptions.interactable = true;
         m_menuOptions.blocksRaycasts = true;
         m_isOpened = true;
+        m_firstSelectable.Select();
+        OnMenuOpened?.Invoke();
     }
 
     private void OnSaveButtonClicked()
     {
+        // TODO save ?
+        CloseOptionMenu();
     }
 
     private void OnDefaultButtonClicked()
@@ -118,11 +135,7 @@ public class OptionsMenuController : MonoBehaviour
         m_menuOptions.interactable = false;
         m_menuOptions.blocksRaycasts = false;
         m_isOpened = false;
-    }
-
-    private void OnCloseButtonClicked()
-    {
-        CloseOptionMenu();
+        OnMenuClosed?.Invoke();
     }
 
     private void OnQuitButtonClicked()

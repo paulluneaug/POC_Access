@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -11,7 +8,6 @@ public class SelectablePreferenceGroup : MonoBehaviour
     
     [SerializeField] private Selectable m_saveButton;
     [SerializeField] private Selectable m_resetButton;
-    [SerializeField] private Selectable m_backButton;
     
     private UIOptionController[] m_selectableControllerList;
 
@@ -55,11 +51,6 @@ public class SelectablePreferenceGroup : MonoBehaviour
         navigation.selectOnUp = lastController.MainChild;
         navigation.selectOnDown = firstController.MainChild;
         m_resetButton.navigation = navigation;
-                
-        navigation = Utils.CloneNavigation(m_backButton.navigation);
-        navigation.selectOnUp = lastController.MainChild;
-        navigation.selectOnDown = firstController.MainChild;
-        m_backButton.navigation = navigation;
     }
 
     private void OnCancel(InputAction.CallbackContext obj)

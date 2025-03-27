@@ -182,3 +182,5 @@ MonoBehaviour:
   - m_sceneAsset: {fileID: 102900000, guid: 733bb84a769aa8e4a8c00609252662d4, type: 3}
     m_scenePath: Assets/Scenes/ShooterScene.unity
   m_skipMinigameAction: {fileID: 3454523895342181665, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_optionsMenuController: {fileID: 0}
+  m_pauseAction: {fileID: -2774160573038036032, guid: 052faaac586de48259a63d0c4782560b, type: 3}

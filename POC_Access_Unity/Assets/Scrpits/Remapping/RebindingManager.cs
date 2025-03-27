@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class RebindingManager : MonoBehaviour
+using UnityUtility.Singletons;
+
+public class RebindingManager : MonoBehaviourSingleton<RebindingManager>
 {
     public bool RebindingOperationRunning => m_rebindingOperationRunning;
 
@@ -19,7 +21,6 @@ public class RebindingManager : MonoBehaviour
     [SerializeField] private RectTransform m_controllersParent;
     [SerializeField] private Button m_saveRebindingButton;
     [SerializeField] private Button m_defaultButton;
-    [SerializeField] private Button m_quitRebindingButton;
 
     [SerializeField] private RebindingInfosController m_rebindingInfosController;
 
@@ -29,11 +30,11 @@ public class RebindingManager : MonoBehaviour
 
     private readonly List<RebindableActionController> m_modifiedControllers = new();
 
-    private void Awake()
+    public override void Initialize()
     {
+        base.Initialize();
         LoadCanvas();
     }
-
 
     private void LoadCanvas()
     {
@@ -67,7 +68,6 @@ public class RebindingManager : MonoBehaviour
         m_rebindingInfosController.HideOperationInfos();
 
         m_saveRebindingButton.onClick.AddListener(OnSaveButtonClicked);
-        m_quitRebindingButton.onClick.AddListener(OnBackButtonClicked);
         m_defaultButton.onClick.AddListener(OnDefaultButtonClicked);
     }
 
@@ -85,7 +85,6 @@ public class RebindingManager : MonoBehaviour
         }
 
         m_saveRebindingButton.onClick.RemoveListener(OnSaveButtonClicked);
-        m_quitRebindingButton.onClick.RemoveListener(OnBackButtonClicked);
         m_defaultButton.onClick.RemoveListener(OnDefaultButtonClicked);
     }
 
@@ -133,11 +132,6 @@ public class RebindingManager : MonoBehaviour
         SaveRebinding();
     }
 
-    private void OnBackButtonClicked()
-    {
-        Back();
-    }
-
     private void OnDefaultButtonClicked()
     {
         foreach (var controller in m_modifiedControllers)
@@ -145,10 +139,5 @@ public class RebindingManager : MonoBehaviour
             controller.SetDefaultBinding();
         }
         m_modifiedControllers.Clear();
-    }
-
-    private void Back()
-    {
-
     }
 }
