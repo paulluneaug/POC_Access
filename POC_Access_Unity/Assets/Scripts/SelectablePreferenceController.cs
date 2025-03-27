@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SelectablePreferenceController : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
+public class SelectablePreferenceController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
     [Header("Components")] [SerializeField]
     private Selectable _mainChild;
@@ -42,7 +42,7 @@ public class SelectablePreferenceController : MonoBehaviour, IPointerDownHandler
         m_indexInGroup = index;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         Select();
     }

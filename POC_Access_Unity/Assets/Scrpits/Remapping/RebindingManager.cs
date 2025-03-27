@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using TMPro;
@@ -22,19 +23,18 @@ public class RebindingManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private RectTransform m_controllersParent;
-    [SerializeField] private TMP_Dropdown m_selectedDeviceDropdown;
-    [SerializeField] private SerializedDictionary<TMP_Dropdown.OptionData, DeviceData> m_deviceOptions;
-
     [SerializeField] private Button m_saveRebindingButton;
+    [SerializeField] private Button m_defaultButton;
     [SerializeField] private Button m_quitRebindingButton;
 
     [SerializeField] private RebindingInfosController m_rebindingInfosController;
-
 
     [NonSerialized] private RebindableActionController[] m_remapableControllers;
 
     [NonSerialized] private bool m_rebindingOperationRunning;
 
+    private List<RebindableActionController> m_modifiedControllers = new();
+    
     private void Awake()
     {
         LoadCanvas();
@@ -45,29 +45,27 @@ public class RebindingManager : MonoBehaviour
     {
         LoadRebinding();
 
-        m_selectedDeviceDropdown.options = m_deviceOptions.Keys.ToList();
-        m_selectedDeviceDropdown.onValueChanged.AddListener(OnSelectedDeviceChanged);
-        m_selectedDeviceDropdown.SetValueWithoutNotify(0);
-
-        TMP_Dropdown.OptionData selectedOption = m_selectedDeviceDropdown.options[0];
-        DeviceData selectedDeviceData = m_deviceOptions[selectedOption];
-
-
         int actionsCount = m_remappableActions.Length;
         m_remapableControllers = new RebindableActionController[actionsCount];
 
         for (int iAction = 0; iAction < actionsCount; ++iAction)
         {
             InputActionReference remapableAction = m_remappableActions[iAction];
+            if (remapableAction.action.bindings[0].isComposite)
+            {
+                Debug.Log($"Composite, {remapableAction.action.name}");
+            }
             RebindableActionController actionController = Instantiate(m_remappableActionControllerPrefab).GetComponent<RebindableActionController>();
 
             actionController.gameObject.name = $"{remapableAction.name}_Controller";
             actionController.gameObject.SetActive(true);
             actionController.transform.SetParent(m_controllersParent);
-            actionController.Init(this, remapableAction, selectedDeviceData);
+            actionController.Init(this, remapableAction);
 
             actionController.OnRebindingStart += OnRebindingStarts;
             actionController.OnRebindingEnds += OnRebindingEnds;
+            actionController.OnRebindingCompleted += OnRebindingCompleted;
+            actionController.OnRebindingCancelled += OnRebindingCancelled;
 
             m_remapableControllers[iAction] = actionController;
         }
@@ -75,7 +73,8 @@ public class RebindingManager : MonoBehaviour
         m_rebindingInfosController.HideOperationInfos();
 
         m_saveRebindingButton.onClick.AddListener(OnSaveButtonClicked);
-        m_quitRebindingButton.onClick.AddListener(Quit);
+        m_quitRebindingButton.onClick.AddListener(OnBackButtonClicked);
+        m_defaultButton.onClick.AddListener(OnDefaultButtonClicked);
     }
 
     private void OnDestroy()
@@ -86,11 +85,14 @@ public class RebindingManager : MonoBehaviour
             RebindableActionController actionController = m_remapableControllers[iAction];
             actionController.OnRebindingStart -= OnRebindingStarts;
             actionController.OnRebindingEnds -= OnRebindingEnds;
+            actionController.OnRebindingCompleted -= OnRebindingCompleted;
+            actionController.OnRebindingCancelled -= OnRebindingCancelled;
             actionController.Dispose();
         }
 
         m_saveRebindingButton.onClick.RemoveListener(OnSaveButtonClicked);
-        m_quitRebindingButton.onClick.RemoveListener(Quit);
+        m_quitRebindingButton.onClick.RemoveListener(OnBackButtonClicked);
+        m_defaultButton.onClick.RemoveListener(OnDefaultButtonClicked);
     }
 
     private void OnRebindingStarts(RebindableActionController controller)
@@ -105,11 +107,16 @@ public class RebindingManager : MonoBehaviour
         m_rebindingInfosController.HideOperationInfos();
     }
 
-    private void OnSelectedDeviceChanged(int deviceIndex)
+    private void OnRebindingCompleted(RebindableActionController controller)
     {
-        TMP_Dropdown.OptionData selectedOption = m_selectedDeviceDropdown.options[deviceIndex];
-        DeviceData selectedDeviceData = m_deviceOptions[selectedOption];
-        m_remapableControllers.ForEach(controller => controller.SetDeviceData(selectedDeviceData));
+        Debug.Log("Added binding");
+        m_modifiedControllers.Add(controller);
+    }
+    
+    private void OnRebindingCancelled(RebindableActionController controller)
+    {
+        Debug.Log("Rebiding cancelled");
+        m_modifiedControllers.Clear();
     }
 
     public void SaveRebinding()
@@ -130,10 +137,23 @@ public class RebindingManager : MonoBehaviour
     private void OnSaveButtonClicked()
     {
         SaveRebinding();
-        Quit();
     }
 
-    private void Quit()
+    private void OnBackButtonClicked()
+    {
+        Back();
+    }
+
+    private void OnDefaultButtonClicked()
+    {
+        foreach (var controller in m_modifiedControllers)
+        {
+           controller.SetDefaultBinding(); 
+        }
+        m_modifiedControllers.Clear();
+    }
+
+    private void Back()
     {
         
     }

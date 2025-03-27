@@ -16,41 +16,39 @@ public class RebindableActionController : SelectablePreferenceController
 {
     public event Action<RebindableActionController> OnRebindingStart;
     public event Action<RebindableActionController> OnRebindingEnds;
+    public event Action<RebindableActionController> OnRebindingCompleted;
+    public event Action<RebindableActionController> OnRebindingCancelled;
 
-    [Header("Parameters")]
+    [Header("Parameters")] 
+    [SerializeField] private string m_controlScheme = "Scheme";
     [SerializeField] private TMP_Text m_actionNameField;
     [SerializeField] private TMP_Text m_actionBindingField;
     [SerializeField] private Button m_rebindButton;
+    [SerializeField] private Button m_defaultButton;
 
     [NonSerialized] private RebindingManager m_rebindingManager;
 
     [NonSerialized] private InputActionReference m_action;
     [NonSerialized] private RebindingOperation m_rebindingOperation;
 
-    [NonSerialized] private DeviceData m_selectedDeviceDatas;
-
     [NonSerialized] private bool m_wasEnabled = false;
 
-    public void Init(RebindingManager rebindingManager, InputActionReference rebindableAction, DeviceData deviceData)
+    public void Init(RebindingManager rebindingManager, InputActionReference rebindableAction)
     {
         m_rebindingManager = rebindingManager;
         m_action = rebindableAction;
-        SetDeviceData(deviceData);
+        UpdateBindingText();
 
-        m_actionNameField.text = m_action.action.name;
+        m_actionNameField.text = $"{m_action.action.name} ({m_action.action.actionMap.name})";
 
         m_rebindButton.onClick.AddListener(OnRebindButtonClicked);
-    }
-
-    public void SetDeviceData(DeviceData deviceData)
-    {
-        m_selectedDeviceDatas = deviceData;
-        UpdateBindingText();
+        m_defaultButton.onClick.AddListener(OnDefaultButtonClicked);
     }
 
     public void Dispose()
     {
         m_rebindButton.onClick.RemoveListener(OnRebindButtonClicked);
+        m_defaultButton.onClick.RemoveListener(OnDefaultButtonClicked);
     }
 
     public RebindingDisplayInfos GetDisplayInfos()
@@ -58,13 +56,13 @@ public class RebindableActionController : SelectablePreferenceController
         return new RebindingDisplayInfos
         {
             ActionName = m_action.action.name,
-            CurrentBindingName = m_action.action.GetBindingDisplayString(group: m_selectedDeviceDatas.BindingGroup),
+            CurrentBindingName = m_action.action.bindings[0].effectivePath
         };
     }
 
     private void UpdateBindingText()
     {
-        m_actionBindingField.text = m_action.action.GetBindingDisplayString(group: m_selectedDeviceDatas.BindingGroup);
+        m_actionBindingField.text = m_action.action.bindings[0].effectivePath;
     }
 
     private void OnRebindButtonClicked()
@@ -74,6 +72,18 @@ public class RebindableActionController : SelectablePreferenceController
             return;
         }
         StartRebinding();
+    }
+    
+
+    private void OnDefaultButtonClicked()
+    {
+        SetDefaultBinding();
+    }
+
+    public void SetDefaultBinding()
+    {
+        m_action.action.RemoveBindingOverride(0);
+        UpdateBindingText();
     }
 
     public void CancelRebindingOperation()
@@ -92,13 +102,11 @@ public class RebindableActionController : SelectablePreferenceController
             .PerformInteractiveRebinding()
             .OnCancel(OnRebindingCanceled)
             .OnComplete(OnRebindingComplete)
-            .WithBindingGroup(m_selectedDeviceDatas.BindingGroup);
+            .WithBindingGroup(m_controlScheme);
 
-        m_selectedDeviceDatas.ControlPaths.ForEach(path => m_rebindingOperation.WithControlsHavingToMatchPath(path));
-
-        if (m_action.action.GetBindingIndex(group: m_selectedDeviceDatas.BindingGroup) == -1)
+        if (m_action.action.GetBindingIndex(group: m_controlScheme) == -1)
         {
-            _ = m_rebindingOperation.WithRebindAddingNewBinding(m_selectedDeviceDatas.BindingGroup);
+            _ = m_rebindingOperation.WithRebindAddingNewBinding(m_controlScheme);
         }
     
         _ = m_rebindingOperation.Start();
@@ -111,6 +119,7 @@ public class RebindableActionController : SelectablePreferenceController
     private void OnRebindingCanceled(RebindingOperation rebindingOperation)
     {
         EndRebindingOperation();
+        OnRebindingCancelled?.Invoke(this);
     }
 
     private void OnRebindingComplete(RebindingOperation rebindingOperation)
@@ -118,7 +127,7 @@ public class RebindableActionController : SelectablePreferenceController
         EndRebindingOperation();
         UpdateBindingText();
 
-        Debug.Log("End rebinding");
+        OnRebindingCompleted?.Invoke(this);
     }
 
     private void EndRebindingOperation()
@@ -127,5 +136,7 @@ public class RebindableActionController : SelectablePreferenceController
 
         OnRebindingEnds?.Invoke(this);
         m_rebindingOperation = null;
+
+        Debug.Log("End rebinding");
     }
 }

@@ -1,8 +1,13 @@
+using System.Collections.Generic;
+
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SelectablePreferenceGroup : MonoBehaviour
 {
+    [SerializeField] private InputActionReference m_cancelAction;
+    
     [SerializeField] private Selectable m_saveButton;
     [SerializeField] private Selectable m_resetButton;
     [SerializeField] private Selectable m_backButton;
@@ -15,7 +20,14 @@ public class SelectablePreferenceGroup : MonoBehaviour
     
     private void Start()
     {
+        m_cancelAction.action.performed += OnCancel;
+        
         m_selectableControllerList = GetComponentsInChildren<SelectablePreferenceController>();
+        
+        if (m_selectableControllerList.Length == 0)
+        {
+            return;
+        }
         
         for (var i = 0; i < m_selectableControllerList.Length; i++)
         {
@@ -49,17 +61,17 @@ public class SelectablePreferenceGroup : MonoBehaviour
         navigation.selectOnDown = firstController.MainChild;
         m_backButton.navigation = navigation;
     }
-    
-    private void OnControllerSelected(SelectablePreferenceController controller)
-    {
-        m_currentSelectedController?.Deselect();
-        m_currentSelectedController = controller;
-    }
 
-    public void OnCancel()
+    private void OnCancel(InputAction.CallbackContext obj)
     {
         m_currentSelectedController?.Deselect();
         m_currentSelectedController = null;
         m_saveButton.Select();
+    }
+
+    private void OnControllerSelected(SelectablePreferenceController controller)
+    {
+        m_currentSelectedController?.Deselect();
+        m_currentSelectedController = controller;
     }
 }
