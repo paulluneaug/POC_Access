@@ -273,7 +273,7 @@ MonoBehaviour:
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 7443735459671596220}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnRight: {fileID: 1738029837964880269}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -441,7 +441,7 @@ MonoBehaviour:
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnLeft: {fileID: 1738029837964880269}
     m_SelectOnRight: {fileID: 6535434047778201076}
   m_Transition: 1
   m_Colors:
@@ -898,6 +898,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8673418258467903985, guid: dec65fbae99d91e4abe7b49086895b2c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 6535434047778201076}
+    - target: {fileID: 8673418258467903985, guid: dec65fbae99d91e4abe7b49086895b2c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 7443735459671596220}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
