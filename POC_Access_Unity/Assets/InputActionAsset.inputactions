@@ -520,8 +520,30 @@
         {
             "name": "Common",
             "id": "8dd0fb72-12ab-4d51-9201-8f1f3fbbc82a",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "SkipLevel",
+                    "type": "Button",
+                    "id": "5e648c15-451d-4839-90b7-4cf49a8213a4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "58c4e759-c803-4651-aa6d-361e79f78b94",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Scheme",
+                    "action": "SkipLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         },
         {
             "name": "Platformer",
@@ -709,6 +731,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "ad37a73b-20da-4564-8e3b-f899cf66e61a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -753,6 +784,17 @@
                     "processors": "",
                     "groups": ";Scheme",
                     "action": "Move Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85329812-aa3c-40be-a92b-ffd188ee86b4",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Scheme",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

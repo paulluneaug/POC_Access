@@ -164,7 +164,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5151762464960109148}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.65, y: 0.95, z: -8.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -186,9 +186,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_raycastStart: {fileID: 4173626360545104926}
-  m_moveCameraPositiveAction: {fileID: 1117324276114357167, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_moveCameraNegativeAction: {fileID: -5509882124183876701, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_shootAction: {fileID: 7941157966155655655, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_moveCameraPositiveAction: {fileID: -4329880974184815310, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_moveCameraNegativeAction: {fileID: 499355265752737617, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_shootAction: {fileID: -6459013283741715685, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_maxSpeed: 0
   m_cameraMovementSpeed: 200
 --- !u!136 &7661623839775789704

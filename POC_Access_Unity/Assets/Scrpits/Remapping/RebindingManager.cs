@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using TMPro;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-
-using UnityUtility.Extensions;
-using UnityUtility.SerializedDictionary;
 
 public class RebindingManager : MonoBehaviour
 {
@@ -33,8 +27,8 @@ public class RebindingManager : MonoBehaviour
 
     [NonSerialized] private bool m_rebindingOperationRunning;
 
-    private List<RebindableActionController> m_modifiedControllers = new();
-    
+    private readonly List<RebindableActionController> m_modifiedControllers = new();
+
     private void Awake()
     {
         LoadCanvas();
@@ -112,7 +106,7 @@ public class RebindingManager : MonoBehaviour
         Debug.Log("Added binding");
         m_modifiedControllers.Add(controller);
     }
-    
+
     private void OnRebindingCancelled(RebindableActionController controller)
     {
         Debug.Log("Rebiding cancelled");
@@ -148,13 +142,13 @@ public class RebindingManager : MonoBehaviour
     {
         foreach (var controller in m_modifiedControllers)
         {
-           controller.SetDefaultBinding(); 
+            controller.SetDefaultBinding();
         }
         m_modifiedControllers.Clear();
     }
 
     private void Back()
     {
-        
+
     }
 }

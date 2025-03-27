@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using UnityUtility.Extensions;
+
 public abstract class PuzzleElement : MonoBehaviour
 {
     /// <summary>
@@ -12,4 +14,9 @@ public abstract class PuzzleElement : MonoBehaviour
     public abstract bool IsPushable();
 
     public Vector3 Center => transform.position + new Vector3(0.5f, 0.5f, 0.5f);
+
+    public virtual void Move(Vector2 offset)
+    {
+        transform.position += offset.X0Y();
+    }
 }

@@ -16,7 +16,8 @@ public class RunnerPlayerController : MonoBehaviour
     [SerializeField] private Rigidbody m_rigidbody;
     [SerializeField] private BoxCollider m_collider;
     [SerializeField] private GroundDetector m_groundDetector;
-
+    [SerializeField] private Animator m_playerAnimator;
+ 
     [Title("Misc")]
     [SerializeField] private LayerMask m_groundLayers;
     [SerializeField] private float m_raycastDistance = 0.1f;
@@ -60,5 +61,6 @@ public class RunnerPlayerController : MonoBehaviour
     private void Jump()
     {
         m_rigidbody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
+        m_playerAnimator.SetTrigger("Jump");
     }
 }

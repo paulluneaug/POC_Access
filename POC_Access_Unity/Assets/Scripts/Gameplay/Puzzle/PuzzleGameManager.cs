@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 using UnityUtility.CustomAttributes;
 using UnityUtility.Extensions;
 using UnityUtility.MathU;
@@ -11,26 +13,25 @@ public class PuzzleGameManager : MiniGameManager
     [SerializeField] private int m_pushLimit = 10000;
 
     [Title("Inputs")]
-    [SerializeField] private InputActionReference m_movePlayerAction;
+    [SerializeField] private InputActionReference m_moveUpPlayerAction;
+    [SerializeField] private InputActionReference m_moveRightPlayerAction;
+    [SerializeField] private InputActionReference m_moveDownPlayerAction;
+    [SerializeField] private InputActionReference m_moveLeftPlayerAction;
+
     [SerializeField] private InputActionReference m_restartLevelAction;
 
-    [Title("Puzzle Elements")]
-    [SerializeField] private PuzzlePlayer m_player;
+    [NonSerialized] private PuzzlePlayer m_player;
 
     [NonSerialized] private PuzzleTarget[] m_targets;
 
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
-    {
-        m_movePlayerAction.asset.Enable();
-        StartGame();
-    }
-
     // Update is called once per frame
     private void Update()
     {
+        if (!m_started)
+        {
+            return;
+        }
         if (m_targets.All(target => target.HasBox()))
         {
             FinishGame();
@@ -41,15 +42,37 @@ public class PuzzleGameManager : MiniGameManager
     public override void StartGame()
     {
         base.StartGame();
+        m_player = FindFirstObjectByType<PuzzlePlayer>();
         m_targets = FindObjectsByType<PuzzleTarget>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        m_movePlayerAction.action.performed += OnMoveActionPerformed;
+
+        m_moveUpPlayerAction.action.performed += OnMoveUpPerformed;
+        m_moveRightPlayerAction.action.performed += OnMoveRightPerformed;
+        m_moveDownPlayerAction.action.performed += OnMoveDownPerformed;
+        m_moveLeftPlayerAction.action.performed += OnMoveLeftPerformed;
+
         m_restartLevelAction.action.performed += RestartGame;
     }
 
     public override void Dispose()
     {
         base.Dispose();
-        m_movePlayerAction.action.performed -= OnMoveActionPerformed;
+
+        m_moveUpPlayerAction.action.performed -= OnMoveUpPerformed;
+        m_moveRightPlayerAction.action.performed -= OnMoveRightPerformed;
+        m_moveDownPlayerAction.action.performed -= OnMoveDownPerformed;
+        m_moveLeftPlayerAction.action.performed -= OnMoveLeftPerformed;
+
+        m_restartLevelAction.action.performed -= RestartGame;
+    }
+
+    private void OnDestroy()
+    {
+
+        m_moveUpPlayerAction.action.performed -= OnMoveUpPerformed;
+        m_moveRightPlayerAction.action.performed -= OnMoveRightPerformed;
+        m_moveDownPlayerAction.action.performed -= OnMoveDownPerformed;
+        m_moveLeftPlayerAction.action.performed -= OnMoveLeftPerformed;
+
         m_restartLevelAction.action.performed -= RestartGame;
     }
 
@@ -58,9 +81,28 @@ public class PuzzleGameManager : MiniGameManager
         m_requestReload = true;
     }
 
-    private void OnMoveActionPerformed(InputAction.CallbackContext context)
+    private void OnMoveUpPerformed(InputAction.CallbackContext context)
     {
-        Vector2 moveInput = context.ReadValue<Vector2>();
+        OnMovePerformed(Vector2.up);
+    }
+
+    private void OnMoveRightPerformed(InputAction.CallbackContext context)
+    {
+        OnMovePerformed(Vector2.right);
+    }
+
+    private void OnMoveDownPerformed(InputAction.CallbackContext context)
+    {
+        OnMovePerformed(Vector2.down);
+    }
+
+    private void OnMoveLeftPerformed(InputAction.CallbackContext context)
+    {
+        OnMovePerformed(Vector2.left);
+    }
+
+    private void OnMovePerformed(Vector2 moveInput)
+    {
         if (moveInput == Vector2.zero)
         {
             return;
@@ -104,7 +146,7 @@ public class PuzzleGameManager : MiniGameManager
                         bool hitElementMoved = TryMove(hitElement, offset, ++pushDepth);
                         if (hitElementMoved)
                         {
-                            Move(puzzleElement, offset);
+                            puzzleElement.Move(offset);
                             return true;
                         }
                         return false;
@@ -112,7 +154,7 @@ public class PuzzleGameManager : MiniGameManager
                     // Transparent object
                     case (false, true):
                     case (false, false):
-                        Move(puzzleElement, offset);
+                        puzzleElement.Move(offset);
                         return true;
 
                     default:
@@ -128,14 +170,9 @@ public class PuzzleGameManager : MiniGameManager
         }
         else
         {
-            Move(puzzleElement, offset);
+            puzzleElement.Move(offset);
             return true;
         }
-    }
-
-    private void Move(PuzzleElement puzzleElement, Vector2 offset)
-    {
-        puzzleElement.transform.position += offset.X0Y();
     }
 
     private int Sign(float value)

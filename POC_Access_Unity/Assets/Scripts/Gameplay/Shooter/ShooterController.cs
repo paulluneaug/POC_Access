@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 using UnityUtility.CustomAttributes;
 
 [RequireComponent(typeof(Rigidbody))]
