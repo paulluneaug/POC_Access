@@ -68,17 +68,23 @@ public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuContr
     
     private void OptionVolumeGlobalChanged(float value)
     {
-        m_mixer.SetFloat("GlobalVolume", value.Remap(0, 100, -80, 0));
+        SetVolume("GlobalVolume", value);
     }
 
     private void OptionVolumeSFXChanged(float value)
     {
-        m_mixer.SetFloat("SFXVolume", value.Remap(0, 100, -80, 0));
+        SetVolume("SFXVolume", value);
     }
 
     private void OptionVolumeMusicChanged(float value)
     {
-        m_mixer.SetFloat("MusicVolume", value.Remap(0, 100, -80, 0));
+        SetVolume("MusicVolume", value);
+    }
+
+    private void SetVolume(string group, float value)
+    {
+        var volume = value == 0 ? -80 : Mathf.Log10(value / 100f) * 20;
+        m_mixer.SetFloat(group, volume);
     }
 
     private void OptionGameSpeedChanged(float value)

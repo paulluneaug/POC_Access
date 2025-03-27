@@ -21,7 +21,7 @@ public class UIOptionController : MonoBehaviour, IPointerClickHandler, IPointerE
 
     private bool m_isHighlighted = false;
     private bool m_isSelected = false;
-    private SelectablePreferenceGroup m_parentGroup;
+    private UISelectablePreferenceGroup m_parentGroup;
     private int m_indexInGroup;
     private ScrollRect m_parentScrollRect;
     private Selectable[] m_childrenSelectable;
@@ -40,7 +40,7 @@ public class UIOptionController : MonoBehaviour, IPointerClickHandler, IPointerE
         m_parentScrollRect = GetComponentInParent<ScrollRect>(); // needs to be here
     }
 
-    public void Init(SelectablePreferenceGroup group, int index)
+    public void Init(UISelectablePreferenceGroup group, int index)
     {
         m_parentGroup = group;
         m_indexInGroup = index;

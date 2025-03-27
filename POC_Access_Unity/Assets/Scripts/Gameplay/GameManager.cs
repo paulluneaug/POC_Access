@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
     [NonSerialized] private int m_currentSceneIndex;
     [NonSerialized] private MiniGameManager m_currentMinigame;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float m_currentTimeScale = 1;
+
     protected override void Start()
     {
         base.Start();
-        
+
         m_currentSceneIndex = -1;
 
         GameOptionsManager optionManager = GameOptionsManager.Instance;
@@ -35,19 +36,16 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         m_optionsMenuController.OnMenuClosed += OnOptionsMenuClosedFirstTime;
         m_optionsMenuController.OpenOptionMenu();
         m_pauseAction.action.performed += OnGamePaused;
-
     }
 
-    // TODO
     private void PauseGame()
     {
-        
+        Time.timeScale = 0;
     }
 
-    // TODO
     private void ResumeGame()
     {
-        
+        Time.timeScale = m_currentTimeScale;
     }
 
     private void OnOptionsMenuClosedFirstTime()
@@ -69,6 +67,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     private void StartGame()
     {
+        Time.timeScale = m_currentTimeScale;
         LoadNextScene();
     }
 
@@ -151,7 +150,7 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     private void OnGameSpeedChanged(float newTimeScale)
     {
-        Time.timeScale = newTimeScale;
+        m_currentTimeScale = newTimeScale;
     }
 
     private void OnWindowedModeChanged(bool newValue)

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class SelectablePreferenceGroup : MonoBehaviour
+public class UISelectablePreferenceGroup : MonoBehaviour
 {
     [SerializeField] private InputActionReference m_cancelAction;
     

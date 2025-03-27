@@ -1,9 +1,11 @@
+using System;
+using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIAbstractOptionSliderController : UIAbstractOption<float>
+public class UIOptionSliderController : UIAbstractOption<float>
 {
     [Header("Components")]
     [SerializeField] private Slider _slider;
@@ -23,18 +25,20 @@ public class UIAbstractOptionSliderController : UIAbstractOption<float>
     [SerializeField] private string _preferenceName;
     [SerializeField] private float _defaultValue;
 
-    private void Start()
+    private IEnumerator Start()
     {
         _slider.minValue = _minValue;
         _slider.maxValue = _maxValue;
         _slider.wholeNumbers = _wholeNumbers;
-        
         _slider.onValueChanged.AddListener(OnValueChanged);
-        var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
-        _slider.value = value;
         _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
+        
+        // This needs to be after GameManager registers to the "game speed" observable float and I don't have to to make it clean
+        yield return null;
+        var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
+        _slider.value = value;
     }
 
     private void OnValueChanged(float value)

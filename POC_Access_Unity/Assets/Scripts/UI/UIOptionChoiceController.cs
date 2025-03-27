@@ -1,9 +1,11 @@
+using System.Collections;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityUtility.Extensions;
 
-public class UIAbstractOptionChoiceController : UIAbstractOption<string>
+public class UIOptionChoiceController : UIAbstractOption<string>
 {
     [Header("Components")] 
     [SerializeField] private TMP_Text _selectedChoiceText;
@@ -22,15 +24,18 @@ public class UIAbstractOptionChoiceController : UIAbstractOption<string>
 
     private int m_currentSelectedIndex;
 
-    private void Start()
+    private IEnumerator Start()
     {
-        var value = PlayerPrefs.GetString(_preferenceName, _defaultValue);
-        m_currentSelectedIndex = ValueToIndex(value);
-        OnIndexChanged();
 
         _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
+        
+        // This needs to be after GameManager registers to the "game speed" observable float and I don't have to to make it clean
+        yield return null;
+        var value = PlayerPrefs.GetString(_preferenceName, _defaultValue);
+        m_currentSelectedIndex = ValueToIndex(value);
+        OnIndexChanged();
     }
     
     public override void SetDefault()

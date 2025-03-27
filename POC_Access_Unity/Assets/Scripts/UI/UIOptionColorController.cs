@@ -1,7 +1,9 @@
+using System.Collections;
+
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIAbstractOptionColorController : UIAbstractOption<Color>
+public class UIOptionColorController : UIAbstractOption<Color>
 {
     [Header("Components")] 
     [SerializeField] private Slider _colorSlider;
@@ -20,7 +22,7 @@ public class UIAbstractOptionColorController : UIAbstractOption<Color>
 
     [SerializeField] private float _defaultValue;
 
-    private void Start()
+    private IEnumerator Start()
     {
         var hueTex = new Texture2D(4, 1);
         hueTex.SetPixels(new Color[] { Color.red, Color.green, Color.blue, Color.red });
@@ -30,6 +32,9 @@ public class UIAbstractOptionColorController : UIAbstractOption<Color>
         _defaultButton.onClick.AddListener(SetDefault);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
+        
+        // This needs to be after GameManager registers to the "game speed" observable float and I don't have to to make it clean
+        yield return null;
         var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
         _colorSlider.value = value;
     }
