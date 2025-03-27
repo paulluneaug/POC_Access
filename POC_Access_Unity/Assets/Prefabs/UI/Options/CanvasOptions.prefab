@@ -1884,6 +1884,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7701791330517647628}
     m_Modifications:
+    - target: {fileID: 2443164298884076718, guid: 91c4ecd3e10717a45b2b303967d17d01, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5017557427581447096, guid: 91c4ecd3e10717a45b2b303967d17d01, type: 3}
       propertyPath: m_Name
       value: RebindingInfosPanel
