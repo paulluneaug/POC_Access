@@ -1,108 +1,106 @@
 using System;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SelectablePreferenceController : Selectable
-// , ISelectHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class SelectablePreferenceController : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
     [Header("Components")] [SerializeField]
     private Selectable _mainChild;
+
+    public Selectable MainChild => _mainChild;
+    
     [SerializeField] private Image _backgroundImage;
 
     [Header("Selection properties")] [SerializeField]
     private Color _normalColor;
-
     [SerializeField] private Color _highlightedColor;
     [SerializeField] private Color _selectedColor;
 
     public event Action<SelectablePreferenceController> OnControllerSelected;
 
-    private bool _isHighlighted = false;
-    private bool _isSelected = false;
-    private SelectablePreferenceGroup _parentGroup;
-    private int _indexInGroup;
-    private ScrollRect _parentScrollRect;
+    private bool m_isHighlighted = false;
+    private bool m_isSelected = false;
+    private SelectablePreferenceGroup m_parentGroup;
+    private int m_indexInGroup;
+    private ScrollRect m_parentScrollRect;
+    private Selectable[] m_childrenSelectable;
 
-    // protected virtual void Start()
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
-        _isHighlighted = false;
-        _isSelected = false;
+        m_isHighlighted = false;
+        m_isSelected = false;
         UpdateBackgroundColor();
-        _parentGroup = GetComponentInParent<SelectablePreferenceGroup>();
-        _parentScrollRect = GetComponentInParent<ScrollRect>();
+        m_parentGroup = GetComponentInParent<SelectablePreferenceGroup>();
+        m_parentScrollRect = GetComponentInParent<ScrollRect>();
+        m_childrenSelectable = GetComponentsInChildren<Selectable>();
     }
 
     public void Init(SelectablePreferenceGroup group, int index)
     {
-        _parentGroup = group;
-        _indexInGroup = index;
+        m_parentGroup = group;
+        m_indexInGroup = index;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        OnSelect();
+        Select();
     }
 
-    public override void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        base.OnPointerEnter(eventData);
-        _isHighlighted = true;
+        m_isHighlighted = true;
         UpdateBackgroundColor();
     }
 
-    public override void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
-        base.OnPointerExit(eventData);
-        _isHighlighted = false;
+        m_isHighlighted = false;
         UpdateBackgroundColor();
     }
 
-    public override void OnSelect(BaseEventData eventData)
+    public void OnSelect(BaseEventData eventData)
     {
-        base.OnSelect(eventData);
-        OnSelect();
+        Select();
     }
 
-    private void OnSelect()
+    private void Select()
     {
-        _isSelected = true;
-        OnControllerSelected?.Invoke(this);
-        UpdateBackgroundColor();
-        if (_parentScrollRect != null)
+        if (m_isSelected)
         {
-            if (_indexInGroup == _parentGroup.ControllerCount - 1)
-            {
-                _parentScrollRect.verticalScrollbar.value = 0;
-            }
-            else
-            {
-                _parentScrollRect.verticalScrollbar.value = Mathf.InverseLerp(_parentGroup.ControllerCount, 0, _indexInGroup);
-            }
+            return;
+        }
+        
+        m_isSelected = true;
+        UpdateBackgroundColor();
+        OnControllerSelected?.Invoke(this);
+        
+        // select main child
+        if (_mainChild != null)
+        {
+            _mainChild.Select();
+        }
+        
+        // autoscroll / TODO autoscroll only when outside viewport
+        if (m_parentScrollRect != null)
+        {
+            m_parentScrollRect.verticalNormalizedPosition = 1f - ((float)m_indexInGroup / ( m_parentGroup.ControllerCount - 1));
         }
     }
 
-    public override void OnDeselect(BaseEventData eventData)
+    public void Deselect()
     {
-        base.OnDeselect(eventData);
-    }
-
-    public void OnDeselect()
-    {
-        _isSelected = false;
+        m_isSelected = false;
         UpdateBackgroundColor();
     }
 
     private void UpdateBackgroundColor()
     {
-        if (_isSelected)
+        if (m_isSelected)
         {
             _backgroundImage.color = _selectedColor;
         }
-        else if (_isHighlighted)
+        else if (m_isHighlighted)
         {
             _backgroundImage.color = _highlightedColor;
         }
@@ -112,42 +110,43 @@ public class SelectablePreferenceController : Selectable
         }
     }
 
-    public void SetPrevious(SelectablePreferenceController selectableController)
+    public void SetNavigationRight(Selectable selectable)
     {
-        var nav = CloneNavigation(navigation);
-        nav.selectOnUp = selectableController;
-        navigation = nav;
-        foreach (var childSelectable in GetComponentsInChildren<Selectable>())
+        foreach (var childSelectable in m_childrenSelectable)
         {
-            var childNav = CloneNavigation(childSelectable.navigation);
-            childNav.selectOnUp = selectableController;
+            var childNav = Utils.CloneNavigation(childSelectable.navigation);
+            childNav.selectOnRight = selectable;
             childSelectable.navigation = childNav;
         }
     }
 
-    public void SetNext(SelectablePreferenceController selectableController)
+    public void SetNavigationLeft(Selectable selectable)
     {
-        var nav = CloneNavigation(navigation);
-        nav.selectOnDown = selectableController;
-        navigation = nav;
-        foreach (var childSelectable in GetComponentsInChildren<Selectable>())
+        foreach (var childSelectable in m_childrenSelectable)
         {
-            var childNav = CloneNavigation(childSelectable.navigation);
-            childNav.selectOnDown = selectableController;
+            var childNav = Utils.CloneNavigation(childSelectable.navigation);
+            childNav.selectOnLeft = selectable;
             childSelectable.navigation = childNav;
         }
     }
 
-    private Navigation CloneNavigation(Navigation navigation)
+    public void SetNavigationUp(Selectable selectable)
     {
-        return new Navigation
+        foreach (var childSelectable in m_childrenSelectable)
         {
-            selectOnUp = navigation.selectOnUp, 
-            selectOnDown = navigation.selectOnDown, 
-            selectOnLeft = navigation.selectOnLeft, 
-            selectOnRight = navigation.selectOnRight,
-            mode = navigation.mode,
-            wrapAround = navigation.wrapAround
-        };
+            var childNav = Utils.CloneNavigation(childSelectable.navigation);
+            childNav.selectOnUp = selectable;
+            childSelectable.navigation = childNav;
+        }
+    }
+
+    public void SetNavigationDown(Selectable selectable)
+    {
+        foreach (var childSelectable in m_childrenSelectable)
+        {
+            var childNav = Utils.CloneNavigation(childSelectable.navigation);
+            childNav.selectOnDown = selectable;
+            childSelectable.navigation = childNav;
+        }
     }
 }
