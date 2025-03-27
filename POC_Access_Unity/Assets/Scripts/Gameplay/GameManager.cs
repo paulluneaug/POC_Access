@@ -20,6 +20,17 @@ public class GameManager : MonoBehaviour
 
         m_currentSceneIndex = -1;
         LoadNextScene();
+
+        GameOptionsManager optionManager = GameOptionsManager.Instance;
+        optionManager.IsWindowed.OnValueChanged += OnWindowedModeChanged;
+        optionManager.GameSpeed.OnValueChanged += OnGameSpeedChanged;
+    }
+
+    private void OnDestroy()
+    {
+        GameOptionsManager optionManager = GameOptionsManager.Instance;
+        optionManager.IsWindowed.OnValueChanged -= OnWindowedModeChanged;
+        optionManager.GameSpeed.OnValueChanged -= OnGameSpeedChanged;
     }
 
     // Update is called once per frame
@@ -68,6 +79,16 @@ public class GameManager : MonoBehaviour
     private void FinishGames() 
     {
 
+    }
+
+    private void OnGameSpeedChanged(float newTimeScale)
+    {
+        Time.timeScale = newTimeScale;
+    }
+
+    private void OnWindowedModeChanged(bool newValue)
+    {
+        Screen.fullScreen = !newValue;
     }
 
 }

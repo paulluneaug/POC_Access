@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityUtility.Extensions;
 
 public class RunnerGameManager : MiniGameManager
@@ -25,8 +24,6 @@ public class RunnerGameManager : MiniGameManager
         base.Dispose();
         m_deathZoneTriggers.ForEach(deathZone => deathZone.OnEnter -= OnEnterDeathZone);
         m_winZoneTrigger.OnEnter -= OnWinZoneEnter;
-
-
     }
 
     protected override void FinishGame()
@@ -43,6 +40,11 @@ public class RunnerGameManager : MiniGameManager
     private void OnEnterDeathZone(Collider collider)
     {
         if (collider.gameObject != m_player.gameObject)
+        {
+            return;
+        }
+
+        if (GameOptionsManager.Instance.IsInvincible)
         {
             return;
         }
