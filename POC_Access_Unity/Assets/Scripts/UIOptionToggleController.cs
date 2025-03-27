@@ -2,12 +2,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TogglePreferenceController : SelectablePreferenceController
+public class UIOptionToggleController : MonoBehaviour
 {
     [Header("Components")] 
     [SerializeField] private Toggle _toggle;
 
-    [SerializeField] private Button _resetButton;
+    [SerializeField] private Button _defaultButton;
     [SerializeField] private TMP_Text _valueText;
 
     [Header("Preferences")] 
@@ -15,14 +15,13 @@ public class TogglePreferenceController : SelectablePreferenceController
     [SerializeField] private bool _defaultValue;
 
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         _toggle.onValueChanged.AddListener(OnValueChanged);
         var value = IntToBool(PlayerPrefs.GetInt(_preferenceName, BoolToInt(_defaultValue)));
         _toggle.SetIsOnWithoutNotify(value);
         _valueText.text = value ? "On" : "Off";
-        _resetButton.onClick.AddListener(OnReset);
+        _defaultButton.onClick.AddListener(OnReset);
     }
 
     private void OnValueChanged(bool value)

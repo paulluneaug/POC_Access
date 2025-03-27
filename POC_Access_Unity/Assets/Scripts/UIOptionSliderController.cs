@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SliderPreferenceController : SelectablePreferenceController
+public class UIOptionSliderController : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Slider _slider;
-    [SerializeField] private Button _resetButton;
+    [SerializeField] private Button _defaultButton;
     [SerializeField] private Button _leftButton;
     [SerializeField] private Button _rightButton;
     [SerializeField] private TMP_Text _valueText;
@@ -23,9 +23,8 @@ public class SliderPreferenceController : SelectablePreferenceController
     [SerializeField] private string _preferenceName;
     [SerializeField] private float _defaultValue;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         _slider.minValue = _minValue;
         _slider.maxValue = _maxValue;
         _slider.wholeNumbers = _wholeNumbers;
@@ -34,7 +33,7 @@ public class SliderPreferenceController : SelectablePreferenceController
         var value = PlayerPrefs.GetFloat(_preferenceName, _defaultValue);
         _slider.SetValueWithoutNotify(value);
         _valueText.text = value.ToString(_wholeNumbers ? "N0" : "N1", CultureInfo.InvariantCulture);
-        _resetButton.onClick.AddListener(OnReset);
+        _defaultButton.onClick.AddListener(OnReset);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
     }

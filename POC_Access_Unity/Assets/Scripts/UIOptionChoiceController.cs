@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityUtility.Extensions;
 
-public class ChoicesPreferenceController : SelectablePreferenceController
+public class UIOptionChoiceController : MonoBehaviour
 {
     [Header("Components")] 
     [SerializeField] private TMP_Text _selectedChoiceText;
 
-    [SerializeField] private Button _resetButton;
+    [SerializeField] private Button _defaultButton;
     [SerializeField] private Button _leftButton;
     [SerializeField] private Button _rightButton;
 
@@ -22,14 +22,13 @@ public class ChoicesPreferenceController : SelectablePreferenceController
 
     private int m_currentSelectedIndex;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         var value = PlayerPrefs.GetString(_preferenceName, _defaultValue);
         m_currentSelectedIndex = ValueToIndex(value);
         OnIndexChanged();
 
-        _resetButton.onClick.AddListener(OnReset);
+        _defaultButton.onClick.AddListener(OnReset);
         _leftButton.onClick.AddListener(OnLeft);
         _rightButton.onClick.AddListener(OnRight);
     }
