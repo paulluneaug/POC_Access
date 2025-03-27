@@ -7,7 +7,7 @@ public class RunnerGameManager : MiniGameManager
     [SerializeField] private TriggerObject m_winZoneTrigger;
 
     [SerializeField] private RunnerPlayerController m_player;
-
+    [SerializeField] private AudioSource m_deathSource;
 
     public override void StartGame()
     {
@@ -48,7 +48,7 @@ public class RunnerGameManager : MiniGameManager
         {
             return;
         }
-
+        m_deathSource.Play();
         m_player.StopPlayer();
         m_requestReload = true;
     }
