@@ -747,7 +747,7 @@ MonoBehaviour:
   m_moveRightPlayerAction: {fileID: -4674298004873662620, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_moveDownPlayerAction: {fileID: -8252498113972051498, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_moveLeftPlayerAction: {fileID: 2336714373849896770, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_restartLevelAction: {fileID: 1248932093101088756, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_restartLevelAction: {fileID: 3454523895342181665, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!4 &479615872
 Transform:
   m_ObjectHideFlags: 0
