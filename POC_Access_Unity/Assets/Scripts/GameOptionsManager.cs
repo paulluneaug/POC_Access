@@ -1,3 +1,5 @@
+using UnityEngine;
+
 using UnityUtility.ObservableFields;
 using UnityUtility.Singletons;
 

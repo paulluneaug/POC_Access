@@ -1,9 +1,12 @@
 using System;
+
+using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SelectablePreferenceController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
+public class UIOptionController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
     [Header("Components")] [SerializeField]
     private Selectable _mainChild;
@@ -17,7 +20,7 @@ public class SelectablePreferenceController : MonoBehaviour, IPointerClickHandle
     [SerializeField] private Color _highlightedColor;
     [SerializeField] private Color _selectedColor;
 
-    public event Action<SelectablePreferenceController> OnControllerSelected;
+    public event Action<UIOptionController> OnControllerSelected;
 
     private bool m_isHighlighted = false;
     private bool m_isSelected = false;
@@ -26,14 +29,18 @@ public class SelectablePreferenceController : MonoBehaviour, IPointerClickHandle
     private ScrollRect m_parentScrollRect;
     private Selectable[] m_childrenSelectable;
 
-    protected virtual void Start()
+
+    private void Awake()
     {
         m_isHighlighted = false;
         m_isSelected = false;
+        m_childrenSelectable = GetComponentsInChildren<Selectable>(); // needs to be here
+    }
+    
+    protected virtual void Start()
+    {
         UpdateBackgroundColor();
-        m_parentGroup = GetComponentInParent<SelectablePreferenceGroup>();
-        m_parentScrollRect = GetComponentInParent<ScrollRect>();
-        m_childrenSelectable = GetComponentsInChildren<Selectable>();
+        m_parentScrollRect = GetComponentInParent<ScrollRect>(); // needs to be here
     }
 
     public void Init(SelectablePreferenceGroup group, int index)
@@ -84,7 +91,8 @@ public class SelectablePreferenceController : MonoBehaviour, IPointerClickHandle
         // autoscroll / TODO autoscroll only when outside viewport
         if (m_parentScrollRect != null)
         {
-            m_parentScrollRect.verticalNormalizedPosition = 1f - ((float)m_indexInGroup / ( m_parentGroup.ControllerCount - 1));
+            var pos = 1f - ((float)m_indexInGroup / (m_parentGroup.ControllerCount - 1));
+            m_parentScrollRect.verticalNormalizedPosition = pos;
         }
     }
 

@@ -12,18 +12,17 @@ public class SelectablePreferenceGroup : MonoBehaviour
     [SerializeField] private Selectable m_resetButton;
     [SerializeField] private Selectable m_backButton;
     
-    private SelectablePreferenceController[] m_selectableControllerList;
+    private UIOptionController[] m_selectableControllerList;
 
     public int ControllerCount => m_selectableControllerList.Length;
 
-    private SelectablePreferenceController m_currentSelectedController;
+    private UIOptionController m_currentSelectedController;
     
     private void Start()
     {
         m_cancelAction.action.performed += OnCancel;
         
-        m_selectableControllerList = GetComponentsInChildren<SelectablePreferenceController>();
-        
+        m_selectableControllerList = GetComponentsInChildren<UIOptionController>();
         if (m_selectableControllerList.Length == 0)
         {
             return;
@@ -69,7 +68,7 @@ public class SelectablePreferenceGroup : MonoBehaviour
         m_saveButton.Select();
     }
 
-    private void OnControllerSelected(SelectablePreferenceController controller)
+    private void OnControllerSelected(UIOptionController controller)
     {
         m_currentSelectedController?.Deselect();
         m_currentSelectedController = controller;

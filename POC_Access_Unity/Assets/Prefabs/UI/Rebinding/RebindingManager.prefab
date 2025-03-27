@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5470929364826367029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9015824265252087249}
+  - component: {fileID: 1286615451177151725}
+  m_Layer: 0
+  m_Name: RebindingManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9015824265252087249
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5470929364826367029}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1286615451177151725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5470929364826367029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e3a74ac729b4d44aa5d0a42e80ea438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_actionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_remappableActions:
+  - {fileID: -297377678176037557, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -8209593472737616886, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -1479065975513346110, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: 499355265752737617, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -4329880974184815310, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -6459013283741715685, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -8209593472737616886, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -8252498113972051498, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: 2336714373849896770, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  - {fileID: -4674298004873662620, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_remappableActionControllerPrefab: {fileID: 7377788899870420146, guid: c5f120a49a3ed6142ac6609a1b96d118, type: 3}
+  m_controllersParent: {fileID: 0}
+  m_saveRebindingButton: {fileID: 0}
+  m_defaultButton: {fileID: 0}
+  m_quitRebindingButton: {fileID: 0}
+  m_rebindingInfosController: {fileID: 0}

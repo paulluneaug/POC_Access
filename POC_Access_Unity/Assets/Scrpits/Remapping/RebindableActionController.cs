@@ -12,7 +12,7 @@ using static RebindingInfosController;
 
 using RebindingOperation = UnityEngine.InputSystem.InputActionRebindingExtensions.RebindingOperation;
 
-public class RebindableActionController : SelectablePreferenceController
+public class RebindableActionController : UIOptionController
 {
     public event Action<RebindableActionController> OnRebindingStart;
     public event Action<RebindableActionController> OnRebindingEnds;
