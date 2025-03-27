@@ -17,10 +17,12 @@ public class RunnerPlayerController : MonoBehaviour
     [SerializeField] private BoxCollider m_collider;
     [SerializeField] private GroundDetector m_groundDetector;
     [SerializeField] private Animator m_playerAnimator;
- 
+    [SerializeField] private AudioSource m_jumpAudioSource;
+
     [Title("Misc")]
     [SerializeField] private LayerMask m_groundLayers;
     [SerializeField] private float m_raycastDistance = 0.1f;
+    [SerializeField] private Vector3 m_raycastOffset;
 
     [NonSerialized] private bool m_started = false;
 
@@ -46,7 +48,7 @@ public class RunnerPlayerController : MonoBehaviour
         {
             return;
         }
-        bool wallForward = Physics.BoxCast(m_collider.transform.position + m_collider.center, m_collider.size / 2, Vector3.forward, m_collider.transform.rotation, m_raycastDistance, m_groundLayers);
+        bool wallForward = Physics.BoxCast(m_collider.transform.position + m_collider.center + m_raycastOffset, m_collider.size * .4f, Vector3.forward, m_collider.transform.rotation, m_raycastDistance, m_groundLayers);
         m_rigidbody.linearVelocity = m_rigidbody.linearVelocity.WhereZ(wallForward ? 0.0f : m_speed);
     }
 
@@ -62,5 +64,6 @@ public class RunnerPlayerController : MonoBehaviour
     {
         m_rigidbody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
         m_playerAnimator.SetTrigger("Jump");
+        m_jumpAudioSource.Play();
     }
 }

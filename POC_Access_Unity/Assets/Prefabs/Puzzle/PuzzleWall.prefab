@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PuzzleWall
       objectReference: {fileID: 0}
+    - target: {fileID: 4193347664292698158, guid: 58b96b3d28cc42d48a5c16ce2cb4318b, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4193347664292698158, guid: 58b96b3d28cc42d48a5c16ce2cb4318b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5700317014142032712, guid: 58b96b3d28cc42d48a5c16ce2cb4318b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
