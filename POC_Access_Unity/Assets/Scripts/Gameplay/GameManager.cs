@@ -1,13 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityUtility.SceneReference;
 
 public class GameManager : MonoBehaviour
 {
-
     //Platformer puzzle shooter
     [SerializeField] private SceneReference[] m_gameplayScenes;
+
+    [SerializeField] private InputActionReference m_skipMinigameAction;
 
 
     [NonSerialized] private int m_currentSceneIndex;
@@ -24,13 +26,20 @@ public class GameManager : MonoBehaviour
         GameOptionsManager optionManager = GameOptionsManager.Instance;
         optionManager.IsWindowed.OnValueChanged += OnWindowedModeChanged;
         optionManager.GameSpeed.OnValueChanged += OnGameSpeedChanged;
+
+        m_skipMinigameAction.action.performed += SkipMinigame;
     }
 
     private void OnDestroy()
     {
-        GameOptionsManager optionManager = GameOptionsManager.Instance;
-        optionManager.IsWindowed.OnValueChanged -= OnWindowedModeChanged;
-        optionManager.GameSpeed.OnValueChanged -= OnGameSpeedChanged;
+        if (!GameOptionsManager.ApplicationIsQuitting)
+        {
+            GameOptionsManager optionManager = GameOptionsManager.Instance;
+            optionManager.IsWindowed.OnValueChanged -= OnWindowedModeChanged;
+            optionManager.GameSpeed.OnValueChanged -= OnGameSpeedChanged;
+        }
+
+        m_skipMinigameAction.action.performed -= SkipMinigame;
     }
 
     // Update is called once per frame
@@ -38,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         if (m_currentMinigame != null && m_currentMinigame.RequestSceneReload)
         {
+            m_currentMinigame.RequestSceneReload = false;
             LoadGameScene(m_currentSceneIndex);
         }
     }
@@ -71,6 +81,11 @@ public class GameManager : MonoBehaviour
         LoadGameScene(m_currentSceneIndex);
     }
 
+    private void SkipMinigame(InputAction.CallbackContext context)
+    {
+        LoadNextScene();
+    }
+
     private void OnGameFinished()
     {
         LoadNextScene();
@@ -90,5 +105,4 @@ public class GameManager : MonoBehaviour
     {
         Screen.fullScreen = !newValue;
     }
-
 }

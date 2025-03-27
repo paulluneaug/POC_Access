@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 10
   m_jumpForce: 60
-  m_jumpAction: {fileID: -2270306754664684213, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_jumpAction: {fileID: -297377678176037557, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_rigidbody: {fileID: 48326279}
   m_collider: {fileID: 48326280}
   m_groundDetector: {fileID: 1296136269}

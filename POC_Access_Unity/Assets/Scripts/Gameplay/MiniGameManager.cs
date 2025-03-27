@@ -5,7 +5,7 @@ public abstract class MiniGameManager : MonoBehaviour
 {
     public event Action OnGameFinished;
 
-    public bool RequestSceneReload => m_requestReload;
+    public bool RequestSceneReload { get => m_requestReload; set => m_requestReload = value; }
 
     protected bool m_started = false;
     protected bool m_requestReload = false;
