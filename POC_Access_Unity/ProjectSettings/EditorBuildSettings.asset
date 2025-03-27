@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/RebindingScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/EntryScene.unity
+    guid: 54f96c7af426c8e4eb6b540bdf1a92d8
   - enabled: 1
     path: Assets/Scenes/RunnerScene.unity
     guid: fdd151e018d7a4e42baeb565cec316b6
