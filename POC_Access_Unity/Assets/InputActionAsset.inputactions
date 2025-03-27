@@ -529,6 +529,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Skip",
+                    "type": "Button",
+                    "id": "62d48aac-aa64-4353-9f92-e8712d695d1f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -540,6 +549,17 @@
                     "processors": "",
                     "groups": ";Scheme",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6cc6731-ba1a-473f-b385-3557baa69dd4",
+                    "path": "<Keyboard>/backspace",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Scheme",
+                    "action": "Skip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -731,6 +751,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "e2ddc46a-c144-4de8-84de-d2a6c6db2ffa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -775,6 +804,17 @@
                     "processors": "",
                     "groups": ";Scheme",
                     "action": "Move Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5da0e7e-61ec-409a-b3b1-84fce189ada1",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Scheme",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

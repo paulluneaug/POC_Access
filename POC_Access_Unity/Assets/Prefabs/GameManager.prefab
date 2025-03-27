@@ -181,4 +181,4 @@ MonoBehaviour:
     m_scenePath: Assets/Scenes/PuzzleScene.unity
   - m_sceneAsset: {fileID: 102900000, guid: 733bb84a769aa8e4a8c00609252662d4, type: 3}
     m_scenePath: Assets/Scenes/ShooterScene.unity
-  m_skipMinigameAction: {fileID: -2804218420203135460, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_skipMinigameAction: {fileID: 3454523895342181665, guid: 052faaac586de48259a63d0c4782560b, type: 3}
