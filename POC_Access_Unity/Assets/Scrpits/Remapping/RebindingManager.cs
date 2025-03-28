@@ -71,8 +71,9 @@ public class RebindingManager : MonoBehaviourSingleton<RebindingManager>
         m_defaultButton.onClick.AddListener(OnDefaultButtonClicked);
     }
 
-    private void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         int actionsCount = m_remappableActions.Length;
         for (int iAction = 0; iAction < actionsCount; ++iAction)
         {

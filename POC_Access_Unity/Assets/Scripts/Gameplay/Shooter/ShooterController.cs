@@ -16,6 +16,8 @@ public class ShooterController : MonoBehaviour
 
     [SerializeField] private float m_maxSpeed;
     [SerializeField] private float m_cameraMovementSpeed;
+    [SerializeField] private float m_minCameraSpeed;
+    [SerializeField] private float m_maxCameraSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -29,7 +31,8 @@ public class ShooterController : MonoBehaviour
 
 
         // It is assumed that a mouse is used to move the camera so there is no multiplcation by Time.deltaTime
-        transform.rotation *= Quaternion.AngleAxis(camX * m_cameraMovementSpeed /* * (usingMouse ? 1.0f : Time.deltaTime)*/, transform.up);
+        var cameraSpeed = Mathf.Lerp(m_minCameraSpeed, m_maxCameraSpeed, GameOptionsManager.Instance.Sensitivity.Value / 100f);
+        transform.rotation *= Quaternion.AngleAxis(camX * cameraSpeed /* * (usingMouse ? 1.0f : Time.deltaTime)*/, transform.up);
 
 
         if (m_shootAction.action.WasPressedThisFrame())

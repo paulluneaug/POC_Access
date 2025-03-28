@@ -191,6 +191,8 @@ MonoBehaviour:
   m_shootAction: {fileID: -6459013283741715685, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_maxSpeed: 0
   m_cameraMovementSpeed: 200
+  m_minCameraSpeed: 200
+  m_maxCameraSpeed: 2000
 --- !u!136 &7661623839775789704
 CapsuleCollider:
   m_ObjectHideFlags: 0

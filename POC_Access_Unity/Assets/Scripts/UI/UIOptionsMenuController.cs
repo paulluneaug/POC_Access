@@ -27,6 +27,7 @@ public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuContr
     [SerializeField] private UIAbstractOption<float> m_optionVolumeMusic;
     [SerializeField] private UIAbstractOption<float> m_optionGameSpeed;
     [SerializeField] private UIAbstractOption<string> m_optionScreenMode;
+    [SerializeField] private UIAbstractOption<float> m_optionSensitivity;
 
     public event Action OnMenuOpened;
     public event Action OnMenuClosed;
@@ -38,7 +39,7 @@ public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuContr
     public override void Initialize()
     {
         base.Initialize();
-        m_options = new UIAbstractDefaultable[] { m_optionInvincibility, m_optionVolumeGlobal, m_optionVolumeSFX, m_optionVolumeMusic, m_optionGameSpeed, m_optionScreenMode };
+        m_options = new UIAbstractDefaultable[] { m_optionInvincibility, m_optionVolumeGlobal, m_optionVolumeSFX, m_optionVolumeMusic, m_optionGameSpeed, m_optionScreenMode, m_optionSensitivity };
     }
 
     protected override void Start()
@@ -54,6 +55,7 @@ public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuContr
         m_optionVolumeMusic.OnValueChangedEvent += OptionVolumeMusicChanged;
         m_optionGameSpeed.OnValueChangedEvent += OptionGameSpeedChanged;
         m_optionScreenMode.OnValueChangedEvent += OptionScreenModeChanged;
+        m_optionSensitivity.OnValueChangedEvent += OptionSensitivityChanged;
     }
 
 
@@ -90,6 +92,11 @@ public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuContr
     private void OptionGameSpeedChanged(float value)
     {
         GameOptionsManager.Instance.GameSpeed.Value = value;
+    }
+
+    private void OptionSensitivityChanged(float value)
+    {
+        GameOptionsManager.Instance.Sensitivity.Value = (int)value;
     }
 
     private void OptionScreenModeChanged(string value)

@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
 
     [SerializeField] private InputActionReference m_pauseAction;
 
+    [SerializeField] private GameObject m_endPanel;
+
     [NonSerialized] private int m_currentSceneIndex;
     [NonSerialized] private MiniGameManager m_currentMinigame;
 
@@ -154,9 +156,9 @@ public class GameManager : MonoBehaviourSingleton<GameManager>
         LoadNextScene();
     }
 
-    private void FinishGames() 
+    private void FinishGames()
     {
-
+        m_endPanel.SetActive(true);
     }
 
     private void OnGameSpeedChanged(float newTimeScale)
