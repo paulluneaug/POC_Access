@@ -5,7 +5,6 @@ using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-using UnityUtility.MathU;
 using UnityUtility.Singletons;
 
 public class UIOptionsMenuController : MonoBehaviourSingleton<UIOptionsMenuController>

@@ -135,7 +135,7 @@ public class RebindingManager : MonoBehaviourSingleton<RebindingManager>
 
     private void OnDefaultButtonClicked()
     {
-        foreach (var controller in m_modifiedControllers)
+        foreach (var controller in m_remapableControllers)
         {
             controller.SetDefaultBinding();
         }

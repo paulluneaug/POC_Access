@@ -554,6 +554,17 @@
                 },
                 {
                     "name": "",
+                    "id": "5463a7e1-3eb0-47b7-a137-ded82d15d0de",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Scheme",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f6cc6731-ba1a-473f-b385-3557baa69dd4",
                     "path": "<Keyboard>/backspace",
                     "interactions": "",
@@ -587,17 +598,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Scheme",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2b4c9470-7c21-4c75-a773-c8b0b8de29e3",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
